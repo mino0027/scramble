@@ -36,3 +36,66 @@ function shuffle (src) {
    **********************************************/
   
   const words = ["example", "placeholder", "scramble", "javascript", "coding", "challenge", "function", "mathematics", "constant", "array"]; // 1. an array of words to scramble
+
+  
+const ScrambleGame = () => {
+    const [currentWord, setCurrentWord] = React.useState('');
+    const [scrambledWord, setScrambledWord] = React.useState('');
+    const [userInput, setUserInput] = React.useState('');
+    const [points, setPoints] = React.useState(0);
+    const [strikes, setStrikes] = React.useState(0);
+    const [passes, setPasses] = React.useState(3);
+  
+    React.useEffect(() => {
+        const savedState = JSON.parse(localStorage.getItem('scrambleGameState')); // 2. loading the game state from local storage
+        if (savedState) {
+          setCurrentWord(savedState.currentWord);
+          setScrambledWord(savedState.scrambledWord);
+          setPoints(savedState.points);
+          setStrikes(savedState.strikes);
+          setPasses(savedState.passes);
+        } else {
+          startNewGame();
+        }
+      }, []);
+
+  React.useEffect(() => {
+    localStorage.setItem('scrambleGameState', JSON.stringify({
+      currentWord,
+      scrambledWord,
+      points,
+      strikes,
+      passes
+    })); // 2. saving the game state to local storage (allows game saving/reloading)
+  }, [currentWord, scrambledWord, points, strikes, passes]);
+
+  const startNewGame = () => {
+    const newWord = words[Math.floor(Math.random() * words.length)];
+    setCurrentWord(newWord);
+    setScrambledWord(shuffle(newWord));
+    setPoints(0);
+    setStrikes(0);
+    setPasses(3);
+  };
+
+  const handleGuess = (e) => {
+    e.preventDefault(); // 3. preventing a page refresh to keep content
+    if (userInput.toLowerCase() === currentWord.toLowerCase()) {
+      setPoints(points + 1); // 7. updating the points
+      const newWord = words[Math.floor(Math.random() * words.length)];
+      setCurrentWord(newWord);
+      setScrambledWord(shuffle(newWord)); // 4. show a new scrambled word
+    } else {
+      setStrikes(strikes + 1); // 7. updating the strikes
+    }
+    setUserInput(''); // 3. clear the textboxes
+  };
+
+  const handlePass = () => {
+    if (passes > 0) {
+      setPasses(passes - 1); // 8. update the passes
+      const newWord = words[Math.floor(Math.random() * words.length)];
+      setCurrentWord(newWord);
+      setScrambledWord(shuffle(newWord)); // 8. show new scrambled words
+    }
+  };
