@@ -129,7 +129,7 @@ function shuffle(src) {
         <p>Scrambled Word: {scrambledWord}</p>
         <form onSubmit={handleGuess}>
           <input type="text" value={userInput} onChange={handleInputChange} />
-          <button type="submit">Guess Here</button>
+          <button class="submitbtn" type="submit">Guess Here</button>
         </form>
         <button onClick={handlePass} disabled={passes === 0}>Pass</button>
         <p>Points: {points}</p>
@@ -139,5 +139,6 @@ function shuffle(src) {
       </div>
     );
   };
+  
   
   ReactDOM.render(<ScrambleGame />, document.getElementById('root'));

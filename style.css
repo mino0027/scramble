@@ -1,5 +1,101 @@
 body {
-  font-family: Arial, sans-serif;
-  margin: 1rem;
-  padding: 1rem;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+@media screen and (max-width: 600px) {
+    body {
+        font-size: 24px;
+    }
+}
+
+@media screen and (min-width: 601px) and (max-width: 1024px) {
+    body {
+        font-size: 26px;
+    }
+}
+
+@media screen and (min-width: 1025px) {
+    body {
+        font-size: 28px;
+    }
+}
+
+@keyframes shake {
+    0% {
+        transform: translateX(0);
+    }
+    10% {
+        transform: translateX(-10px);
+    }
+    20% {
+        transform: translateX(10px);
+    }
+    30% {
+        transform: translateX(-10px);
+    }
+    40% {
+        transform: translateX(10px);
+    }
+    50% {
+        transform: translateX(-10px);
+    }
+    60% {
+        transform: translateX(10px);
+    }
+    70% {
+        transform: translateX(-10px);
+    }
+    80% {
+        transform: translateX(10px);
+    }
+    90% {
+        transform: translateX(-10px);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+h1 {
+    animation: shake 1s;
+}
+
+/* Rounded edges and shadow effect */
+/* -------Button customization------- */
+button {
+
+    font-size: inherit;
+    border-color: transparent;
+    background-color: rgb(7, 198, 198);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    box-shadow: 0px 6px 0px 0px darkcyan;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: rgb(0, 115, 115);
+    color: white;
+    box-shadow: 0px 6px 0px 0px darkcyan;
+}
+
+
+/* Adjust input size bar */
+input[type="text"] {
+    font-size: inherit;
+}
+
+.submitbtn {
+    margin-left: .5rem;
+    margin-bottom: .5rem;
+    margin-top: -2.5rem;
 }
