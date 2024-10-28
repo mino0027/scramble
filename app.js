@@ -34,7 +34,7 @@ function shuffle(src) {
    * * MY CODE BELOW
   **********************************************/
   const words = ["example", "placeholder", "scramble", "javascript", "coding", "challenge", "function", "mathematics", "constant", "array"]; // 1. an array of words to scramble
-  
+
   const ScrambleGame = () => {
     const [currentWord, setCurrentWord] = React.useState('');
     const [scrambledWord, setScrambledWord] = React.useState('');
@@ -42,6 +42,7 @@ function shuffle(src) {
     const [points, setPoints] = React.useState(0);
     const [strikes, setStrikes] = React.useState(0);
     const [passes, setPasses] = React.useState(3);
+    const [gameWords, setGameWords] = React.useState([...words]);
   
     React.useEffect(() => {
       const savedState = JSON.parse(localStorage.getItem('scrambleGameState')); // 2. loading the game state from local storage
@@ -51,6 +52,7 @@ function shuffle(src) {
         setPoints(savedState.points);
         setStrikes(savedState.strikes);
         setPasses(savedState.passes);
+        setGameWords(savedState.gameWords);
       } else {
         startNewGame();
       }
@@ -62,9 +64,10 @@ function shuffle(src) {
         scrambledWord,
         points,
         strikes,
-        passes
+        passes,
+        gameWords
       })); // 2. saving the game state to local storage (allows game saving/reloading)
-    }, [currentWord, scrambledWord, points, strikes, passes]);
+    }, [currentWord, scrambledWord, points, strikes, passes, gameWords]);
   
     const startNewGame = () => {
       const newWord = words[Math.floor(Math.random() * words.length)];
@@ -73,17 +76,29 @@ function shuffle(src) {
       setPoints(0);
       setStrikes(0);
       setPasses(3);
+      setGameWords([...words]);
     };
   
     const handleGuess = (e) => {
       e.preventDefault(); // 3. preventing a page refresh to keep content
       if (userInput.toLowerCase() === currentWord.toLowerCase()) {
         setPoints(points + 1); // 7. updating the points
-        const newWord = words[Math.floor(Math.random() * words.length)];
-        setCurrentWord(newWord);
-        setScrambledWord(shuffle(newWord)); // 4. show a new scrambled word
+        const remainingWords = gameWords.filter(word => word !== currentWord);
+        setGameWords(remainingWords);
+        if (remainingWords.length === 0) {
+          alert('Congratulations! You have guessed all the words.');
+          startNewGame();
+        } else {
+          const newWord = remainingWords[Math.floor(Math.random() * remainingWords.length)];
+          setCurrentWord(newWord);
+          setScrambledWord(shuffle(newWord)); // 4. show a new scrambled word
+        }
       } else {
         setStrikes(strikes + 1); // 7. updating the strikes
+        if (strikes + 1 >= 3) {
+          alert('Game Over! You have reached the max number of strikes.');
+          startNewGame();
+        }
       }
       setUserInput(''); // 3. clear the textboxes
     };
@@ -91,9 +106,16 @@ function shuffle(src) {
     const handlePass = () => {
       if (passes > 0) {
         setPasses(passes - 1); // 8. update the passes
-        const newWord = words[Math.floor(Math.random() * words.length)];
-        setCurrentWord(newWord);
-        setScrambledWord(shuffle(newWord)); // 8. show new scrambled words
+        const remainingWords = gameWords.filter(word => word !== currentWord);
+        setGameWords(remainingWords);
+        if (remainingWords.length === 0) {
+          alert('Congratulations! You have guessed all the words.');
+          startNewGame();
+        } else {
+          const newWord = remainingWords[Math.floor(Math.random() * remainingWords.length)];
+          setCurrentWord(newWord);
+          setScrambledWord(shuffle(newWord)); // 8. show new scrambled words
+        }
       }
     };
   
